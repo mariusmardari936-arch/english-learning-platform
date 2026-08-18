@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Learning Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0f0f0f;
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 30px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #252525 100%);
+            border-radius: 14px;
+            border: 1px solid #1e40af;
+            box-shadow: 0 8px 32px rgba(30, 64, 175, 0.1);
+        }
+
+        h1 {
+            color: #ffffff;
+            font-size: 38px;
+            margin-bottom: 10px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffffff 0%, #a0aec0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: #9ca3af;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .tagline {
+            color: #60a5fa;
+            font-size: 14px;
+            margin-top: 10px;
+            font-weight: 500;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 20px;
+            padding-left: 15px;
+            border-left: 4px solid #1e40af;
+        }
+
+        .levels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 35px;
+        }
+
+        .level-btn {
+            padding: 18px 15px;
+            border: 2px solid #2d3748;
+            border-radius: 10px;
+            background: #1a1a1a;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+            font-size: 13px;
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+
+        .level-btn:hover {
+            border-color: #1e40af;
+            background: #1e3a5f;
+            box-shadow: 0 4px 16px rgba(30, 64, 175, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .level-btn.active {
+            background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+            color: #ffffff;
+            border-color: #1e40af;
+            box-shadow: 0 6px 20px rgba(30, 64, 175, 0.4);
+        }
+
+        .level-btn-level {
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .level-btn-name {
+            font-size: 11px;
+            margin-top: 6px;
+            opacity: 0.85;
+        }
+
+        .level-info {
+            background: #1a1a1a;
+            padding: 18px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            font-size: 14px;
+            color: #cbd5e1;
+            border-left: 4px solid #1e40af;
+            border: 1px solid #2d3748;
+            border-left: 4px solid #1e40af;
+        }
+
+        .level-info strong {
+            color: #60a5fa;
+        }
+
+        .tasks-section {
+            margin-bottom: 35px;
+        }
+
+        .tasks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .task-card {
+            background: linear-gradient(135deg, #1a1a1a 0%, #252525 100%);
+            border-radius: 12px;
+            padding: 28px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid #2d3748;
+        }
+
+        .task-card:hover {
+            box-shadow: 0 12px 28px rgba(30, 64, 175, 0.25);
+            border-color: #1e40af;
+            transform: translateY(-6px);
+            background: linear-gradient(135deg, #1e3a5f 0%, #1a2847 100%);
+        }
+
+        .task-icon {
+            font-size: 42px;
+            margin-bottom: 16px;
+            color: #60a5fa;
+        }
+
+        .task-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+
+        .task-desc {
+            font-size: 13px;
+            color: #9ca3af;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a1a 0%, #252525 100%);
+            border-radius: 16px;
+            padding: 40px;
+            max-width: 650px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(30, 64, 175, 0.3);
+            border: 1px solid #2d3748;
+        }
+
+        .close-btn {
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            color: #9ca3af;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .close-btn:hover {
+            color: #60a5fa;
+        }
+
+        .exercise-title {
+            color: #ffffff;
+            font-size: 24px;
+            margin: 25px 0;
+            clear: both;
+            font-weight: 600;
+        }
+
+        .question {
+            background: #1a1a1a;
+            padding: 22px;
+            border-radius: 10px;
+            margin-bottom: 22px;
+            font-size: 16px;
+            color: #e2e8f0;
+            border: 1px solid #2d3748;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            padding: 14px 18px;
+            border: 2px solid #2d3748;
+            border-radius: 10px;
+            background: #1a1a1a;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+            text-align: left;
+            color: #e2e8f0;
+        }
+
+        .option:hover {
+            border-color: #1e40af;
+            background: #1e3a5f;
+            color: #60a5fa;
+        }
+
+        .option.selected {
+            background: #1e40af;
+            color: #ffffff;
+            border-color: #1e40af;
+        }
+
+        .option.correct {
+            background: #10b981;
+            color: white;
+            border-color: #10b981;
+        }
+
+        .option.incorrect {
+            background: #ef4444;
+            color: white;
+            border-color: #ef4444;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 24px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 6px 20px rgba(30, 64, 175, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #2d3748;
+            border-radius: 4px;
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #1e40af 0%, #60a5fa 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .feedback {
+            padding: 14px 18px;
+            border-radius: 10px;
+            margin-top: 18px;
+            font-size: 14px;
+            display: none;
+            font-weight: 500;
+        }
+
+        .feedback.success {
+            background: rgba(16, 185, 129, 0.2);
+            color: #6ee7b7;
+            border: 1px solid #10b981;
+            display: block;
+        }
+
+        .feedback.error {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            border: 1px solid #ef4444;
+            display: block;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 18px;
+            margin-top: 40px;
+            margin-bottom: 30px;
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 24px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #252525 100%);
+            border-radius: 12px;
+            border: 1px solid #2d3748;
+            transition: all 0.3s ease;
+        }
+
+        .stat-box:hover {
+            border-color: #1e40af;
+            box-shadow: 0 6px 20px rgba(30, 64, 175, 0.15);
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: 700;
+            color: #60a5fa;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #9ca3af;
+            margin-top: 8px;
+            font-weight: 500;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 30px 20px;
+            border-top: 1px solid #2d3748;
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+        .creator-credit {
+            color: #60a5fa;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #2d3748;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #1e40af;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌍 English Mastery</h1>
+            <p class="subtitle">От новичка к мастеру английского языка</p>
+            <p class="tagline">Интерактивная платформа для всех уровней</p>
+        </header>
+
+        <div style="margin-bottom: 40px;">
+            <div class="section-title">📚 Выбери свой уровень</div>
+            <div class="levels-grid" id="levelsGrid"></div>
+            <div class="level-info" id="levelInfo"></div>
+        </div>
+
+        <div class="tasks-section">
+            <div class="section-title">✨ Доступные задания</div>
+            <div class="tasks-grid" id="tasksGrid"></div>
+        </div>
+
+        <div style="margin-bottom: 30px;">
+            <div class="section-title">📊 Твой прогресс</div>
+            <div class="stats" id="stats">
+                <div class="stat-box">
+                    <div class="stat-number" id="completedCount">0</div>
+                    <div class="stat-label">Завершено</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number" id="accuracyCount">0%</div>
+                    <div class="stat-label">Точность</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number" id="streakCount">0</div>
+                    <div class="stat-label">Серия</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number" id="hoursCount">0h</div>
+                    <div class="stat-label">Время учебы</div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p class="creator-credit">Created by Nardyio</p>
+        </footer>
+    </div>
+
+    <div class="modal" id="exerciseModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">&times;</button>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div id="exerciseContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        const levels = {
+            'A1': { name: 'Beginner A1', description: 'Основы: алфавит, простые фразы, базовые грамматические конструкции', color: '#60a5fa' },
+            'A2': { name: 'Elementary A2', description: 'Частые фразы, простые повествования, базовое письмо', color: '#60a5fa' },
+            'B1': { name: 'Intermediate B1', description: 'Беглая речь, понимание основных идей, написание простых текстов', color: '#60a5fa' },
+            'B1+': { name: 'Upper Intermediate B1+', description: 'Расширенный intermediate для более сложных структур', color: '#60a5fa' },
+            'B2': { name: 'Upper Intermediate B2', description: 'Свободное общение, понимание сложных текстов, детальное письмо', color: '#60a5fa' },
+            'B2+': { name: 'Advanced B2+', description: 'Высокий уровень с нюансами языка и сложной грамматикой', color: '#60a5fa' },
+            'C1': { name: 'Advanced C1', description: 'Свободное, уверенное владение, спонтанная речь, сложные тексты', color: '#60a5fa' },
+            'C1+': { name: 'Proficiency C1+', description: 'Почти полное владение с профессиональным уровнем', color: '#60a5fa' },
+            'C2': { name: 'Mastery C2', description: 'Полное владение, нюансы языка, профессиональное общение', color: '#60a5fa' }
+        };
+
+        const taskTypes = [
+            { name: 'Vocabulary', icon: '📚', desc: 'Расширение словаря' },
+            { name: 'Grammar', icon: '✏️', desc: 'Грамматические правила' },
+            { name: 'Listening', icon: '🎧', desc: 'Аудирование' },
+            { name: 'Reading', icon: '📖', desc: 'Чтение текстов' },
+            { name: 'Writing', icon: '🖊️', desc: 'Письмо' },
+            { name: 'Speaking', icon: '💬', desc: 'Разговорная речь' }
+        ];
+
+        const exercises = {
+            'A1': {
+                'Vocabulary': [
+                    { q: 'What is "cat" in English?', options: ['Кошка', 'Собака', 'Птица', 'Рыба'], correct: 0 },
+                    { q: 'How do you spell "hello"?', options: ['Helo', 'Hello', 'Hallo', 'Hellou'], correct: 1 },
+                    { q: 'What is "blue"?', options: ['Красный', 'Синий', 'Зеленый', 'Желтый'], correct: 1 }
+                ],
+                'Grammar': [
+                    { q: 'Choose correct: I ___ a student', options: ['am', 'is', 'are', 'be'], correct: 0 },
+                    { q: 'He ___ English', options: ['speak', 'speaks', 'speaking', 'spoke'], correct: 1 }
+                ],
+                'Listening': [
+                    { q: 'What greeting do you hear? "Hello, how are you?"', options: ['Goodbye', 'Hello', 'Help', 'Help me'], correct: 1 }
+                ],
+                'Reading': [
+                    { q: 'Read: "I go to school". What does he do?', options: ['Works', 'Sleeps', 'Goes to school', 'Travels'], correct: 2 }
+                ],
+                'Writing': [
+                    { q: 'How do you introduce yourself?', options: ['Hey', 'My name is...', 'Who are you?', 'Bye'], correct: 1 }
+                ],
+                'Speaking': [
+                    { q: 'Choose the correct pronunciation of "schedule"', options: ['шедул', 'сче́дюл', 'скедьюл', 'скелет'], correct: 1 }
+                ]
+            },
+            'A2': {
+                'Vocabulary': [
+                    { q: 'Complete: I like to ___ coffee', options: ['eat', 'drink', 'sleep', 'read'], correct: 1 },
+                    { q: 'What is "friend"?', options: ['враг', 'подруга', 'странный', 'веселый'], correct: 1 },
+                    { q: 'What does "breakfast" mean?', options: ['Ужин', 'Обед', 'Завтрак', 'Закуска'], correct: 2 }
+                ],
+                'Grammar': [
+                    { q: 'Complete: Yesterday I ___ to the cinema', options: ['go', 'goes', 'went', 'going'], correct: 2 }
+                ],
+                'Reading': [
+                    { q: 'Read: "I go to school every day". What does she do?', options: ['Works', 'Sleeps', 'Goes to school', 'Travels'], correct: 2 }
+                ],
+                'Writing': [
+                    { q: 'Write about your day', options: ['I went to school', 'I am going to school', 'I goes to school', 'I goed to school'], correct: 0 }
+                ],
+                'Listening': [
+                    { q: 'Listen: "What time is it?" - What is the question?', options: ['Where', 'How', 'When', 'What'], correct: 3 }
+                ],
+                'Speaking': [
+                    { q: 'How do you say "Please"?', options: ['Pliz', 'Please', 'Plez', 'Plees'], correct: 1 }
+                ]
+            },
+            'B1': {
+                'Vocabulary': [
+                    { q: 'What does "ambitious" mean?', options: ['ленивый', 'честолюбивый', 'скучный', 'грустный'], correct: 1 }
+                ],
+                'Grammar': [
+                    { q: 'Complete: If I ___ you, I would help', options: ['am', 'was', 'were', 'have been'], correct: 2 }
+                ],
+                'Comprehension': [
+                    { q: 'A person who studies medicine is a...', options: ['engineer', 'doctor', 'lawyer', 'teacher'], correct: 1 }
+                ],
+                'Reading': [
+                    { q: 'What is the main idea of this text?', options: ['Travel is bad', 'Travel is good', 'Travel costs money', 'Nothing'], correct: 1 }
+                ],
+                'Writing': [
+                    { q: 'How do you politely decline?', options: ['No', 'Thank you, but I cannot', 'I hate this', 'Maybe'], correct: 1 }
+                ],
+                'Speaking': [
+                    { q: 'How do you express an opinion?', options: ['I think...', 'You think...', 'He thinks...', 'It thinks...'], correct: 0 }
+                ]
+            },
+            'B1+': {
+                'Vocabulary': [
+                    { q: 'What is "eloquent"?', options: ['молчаливый', 'красноречивый', 'тихий', 'громкий'], correct: 1 }
+                ],
+                'Grammar': [
+                    { q: 'Which is correct?', options: ['I wish I go', 'I wish I went', 'I wish I had went', 'I wish I would go'], correct: 1 }
+                ],
+                'Reading': [
+                    { q: 'Understand nuances in text', options: ['Yes', 'No', 'Maybe', 'Cannot decide'], correct: 0 }
+                ],
+                'Writing': [
+                    { q: 'Write a formal email', options: ['Hello', 'Dear Sir/Madam', 'Hey there', 'Hi buddy'], correct: 1 }
+                ],
+                'Listening': [
+                    { q: 'Understand accents', options: ['Easy', 'Moderate', 'Difficult', 'Very difficult'], correct: 1 }
+                ],
+                'Speaking': [
+                    { q: 'Express complex ideas', options: ['Simple', 'Complex', 'Impossible', 'Average'], correct: 1 }
+                ]
+            },
+            'B2': {
+                'Vocabulary': [
+                    { q: 'What is a synonym for "sophisticated"?', options: ['simple', 'refined', 'ugly', 'loud'], correct: 1 }
+                ],
+                'Grammar': [
+                    { q: 'The ___ thing I noticed was...', options: ['first', 'at first', 'firstly', 'at the first'], correct: 0 }
+                ],
+                'Essay': [
+                    { q: 'An essay typically has how many paragraphs?', options: ['1', '2', '3-5', '10'], correct: 2 }
+                ],
+                'Reading': [
+                    { q: 'Analyze complex text structure', options: ['Good', 'Fair', 'Poor', 'Excellent'], correct: 3 }
+                ],
+                'Writing': [
+                    { q: 'Write persuasively', options: ['Can', 'Cannot', 'Difficult', 'Very difficult'], correct: 0 }
+                ],
+                'Discussion': [
+                    { q: 'Discuss abstract topics', options: ['Easy', 'Moderate', 'Hard', 'Very hard'], correct: 1 }
+                ]
+            },
+            'B2+': {
+                'Vocabulary': [
+                    { q: 'What does "paradigm" mean?', options: ['маленький', 'образец', 'парад', 'парадокс'], correct: 1 }
+                ],
+                'Grammar': [
+                    { q: 'Master complex structures', options: ['Simple', 'Intermediate', 'Advanced', 'Mastered'], correct: 3 }
+                ],
+                'Writing': [
+                    { q: 'Write technical content', options: ['Yes', 'No', 'Partially', 'Fully'], correct: 3 }
+                ],
+                'Reading': [
+                    { q: 'Understand professional texts', options: ['Easy', 'Moderate', 'Challenging', 'Very challenging'], correct: 2 }
+                ],
+                'Listening': [
+                    { q: 'Understand lectures', options: ['Always', 'Usually', 'Sometimes', 'Rarely'], correct: 1 }
+                ],
+                'Speaking': [
+                    { q: 'Speak fluently on topics', options: ['Yes', 'Somewhat', 'No', 'Definitely yes'], correct: 3 }
+                ]
+            },
+            'C1': {
+                'Vocabulary': [
+                    { q: 'What is an "oxymoron"?', options: ['series', 'contradiction', 'description', 'name'], correct: 1 }
+                ],
+                'Grammar': [
+                    { q: 'Master all nuances of grammar', options: ['Yes', 'No', 'Partially', 'Fully'], correct: 3 }
+                ],
+                'Literature': [
+                    { q: 'Analyze literary works', options: ['Good', 'Excellent', 'Average', 'Poor'], correct: 1 }
+                ],
+                'Writing': [
+                    { q: 'Write sophisticated texts', options: ['Difficult', 'Possible', 'Easy', 'Excellent'], correct: 2 }
+                ],
+                'Listening': [
+                    { q: 'Understand native speakers', options: ['Always', 'Usually', 'Sometimes', 'Never'], correct: 0 }
+                ],
+                'Speaking': [
+                    { q: 'Discuss complex topics', options: ['Limited', 'Good', 'Very good', 'Excellent'], correct: 3 }
+                ]
+            },
+            'C1+': {
+                'Vocabulary': [
+                    { q: 'Professional terminology mastery', options: ['Basic', 'Intermediate', 'Advanced', 'Expert'], correct: 3 }
+                ],
+                'Grammar': [
+                    { q: 'Perfect grammatical accuracy', options: ['Aim', 'Goal', 'Reality', 'Achieved'], correct: 3 }
+                ],
+                'Professional': [
+                    { q: 'Professional communication', options: ['Fair', 'Good', 'Excellent', 'Professional'], correct: 3 }
+                ],
+                'Writing': [
+                    { q: 'Write professionally', options: ['Yes', 'Definitely yes', 'Absolutely', 'Perfectly'], correct: 3 }
+                ],
+                'Listening': [
+                    { q: 'Native-level comprehension', options: ['Developing', 'Strong', 'Very strong', 'Near-native'], correct: 3 }
+                ],
+                'Speaking': [
+                    { q: 'Native-like fluency', options: ['Goal', 'Approaching', 'Achieved', 'Mastered'], correct: 3 }
+                ]
+            },
+            'C2': {
+                'Vocabulary': [
+                    { q: 'Master subtle language nuances', options: ['Beginner', 'Intermediate', 'Advanced', 'Mastery'], correct: 3 }
+                ],
+                'Grammar': [
+                    { q: 'Perfect command of grammar', options: ['No', 'Partial', 'Good', 'Perfect'], correct: 3 }
+                ],
+                'Literature': [
+                    { q: 'Analyze profound literary works', options: ['Basic', 'Good', 'Excellent', 'Masterful'], correct: 3 }
+                ],
+                'Writing': [
+                    { q: 'Create masterful prose', options: ['No', 'Try', 'Yes', 'Expertly'], correct: 3 }
+                ],
+                'Listening': [
+                    { q: 'Complete native comprehension', options: ['Partial', 'Good', 'Very good', 'Complete'], correct: 3 }
+                ],
+                'Speaking': [
+                    { q: 'Completely fluent communication', options: ['Difficult', 'Possible', 'Easy', 'Effortless'], correct: 3 }
+                ]
+            }
+        };
+
+        let currentLevel = 'A1';
+        let currentTask = null;
+        let stats = { completed: 0, correct: 0, streak: 0, hours: 0 };
+        let currentExerciseIndex = 0;
+
+        function renderLevels() {
+            const grid = document.getElementById('levelsGrid');
+            grid.innerHTML = Object.keys(levels).map(level => `
+                <button class="level-btn ${level === 'A1' ? 'active' : ''}" onclick="selectLevel('${level}')">
+                    <div class="level-btn-level">${level}</div>
+                    <div class="level-btn-name">${levels[level].name.split(' ')[1]}</div>
+                </button>
+            `).join('');
+        }
+
+        function selectLevel(level) {
+            currentLevel = level;
+            currentTask = null;
+            currentExerciseIndex = 0;
+            document.querySelectorAll('.level-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.closest('.level-btn').classList.add('active');
+            
+            document.getElementById('levelInfo').innerHTML = `
+                <strong>📍 ${level} - ${levels[level].name.split(' ').slice(1).join(' ')}:</strong> ${levels[level].description}
+            `;
+            
+            renderTasks();
+        }
+
+        function renderTasks() {
+            const grid = document.getElementById('tasksGrid');
+            grid.innerHTML = taskTypes.map((task, idx) => `
+                <div class="task-card" onclick="startTask('${task.name}')">
+                    <div class="task-icon">${task.icon}</div>
+                    <div class="task-title">${task.name}</div>
+                    <div class="task-desc">${task.desc}</div>
+                </div>
+            `).join('');
+        }
+
+        function startTask(taskName) {
+            currentTask = taskName;
+            currentExerciseIndex = 0;
+            showExercise();
+            document.getElementById('exerciseModal').classList.add('active');
+        }
+
+        function showExercise() {
+            const exes = exercises[currentLevel][currentTask];
+            if (!exes || exes.length === 0) {
+                alert('Упражнения для этого задания еще подготавливаются!');
+                return;
+            }
+
+            const exercise = exes[currentExerciseIndex];
+            const progress = ((currentExerciseIndex + 1) / exes.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+
+            const html = `
+                <h2 class="exercise-title">${currentLevel} - ${currentTask}</h2>
+                <div class="question">${exercise.q}</div>
+                <div class="options" id="options"></div>
+                <button class="btn-primary" onclick="nextExercise()">Далее →</button>
+                <div class="feedback" id="feedback"></div>
+            `;
+
+            document.getElementById('exerciseContainer').innerHTML = html;
+
+            const optionsDiv = document.getElementById('options');
+            exercise.options.forEach((opt, idx) => {
+                const btn = document.createElement('div');
+                btn.className = 'option';
+                btn.textContent = opt;
+                btn.onclick = () => selectAnswer(idx, exercise.correct);
+                optionsDiv.appendChild(btn);
+            });
+        }
+
+        let selectedAnswer = null;
+
+        function selectAnswer(idx, correct) {
+            if (selectedAnswer !== null) return;
+            
+            selectedAnswer = idx;
+            const options = document.querySelectorAll('.option');
+            options[idx].classList.add(idx === correct ? 'correct' : 'incorrect');
+            
+            if (idx !== correct) {
+                options[correct].classList.add('correct');
+            }
+
+            const feedback = document.getElementById('feedback');
+            if (idx === correct) {
+                feedback.textContent = '✓ Отлично!';
+                feedback.classList.add('success');
+                feedback.classList.remove('error');
+                stats.correct++;
+                stats.streak++;
+            } else {
+                feedback.textContent = '✗ Неправильно, попробуй еще!';
+                feedback.classList.add('error');
+                feedback.classList.remove('success');
+                stats.streak = 0;
+            }
+
+            updateStats();
+        }
+
+        function nextExercise() {
+            if (selectedAnswer === null) {
+                alert('Пожалуйста, выбери ответ!');
+                return;
+            }
+
+            currentExerciseIndex++;
+            selectedAnswer = null;
+            
+            const exes = exercises[currentLevel][currentTask];
+            if (currentExerciseIndex >= exes.length) {
+                stats.completed++;
+                stats.hours += 0.25;
+                updateStats();
+                closeModal();
+                alert(`🎉 Отлично! Ты завершил "${currentTask}"\nПравильных ответов: ${stats.correct}/${exes.length}`);
+                stats.correct = 0;
+                return;
+            }
+
+            showExercise();
+        }
+
+        function updateStats() {
+            document.getElementById('completedCount').textContent = stats.completed;
+            document.getElementById('streakCount').textContent = stats.streak;
+            document.getElementById('hoursCount').textContent = stats.hours.toFixed(1) + 'h';
+            const accuracy = stats.completed > 0 ? Math.round((stats.correct / (stats.completed)) * 100) : 0;
+            document.getElementById('accuracyCount').textContent = accuracy + '%';
+        }
+
+        function closeModal() {
+            document.getElementById('exerciseModal').classList.remove('active');
+            selectedAnswer = null;
+            currentExerciseIndex = 0;
+        }
+
+        renderLevels();
+        selectLevel('A1');
+        updateStats();
+    </script>
+</body>
+</html>
